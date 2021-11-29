@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+    <title>REPOPEOPLE</title>
+    <style>
+        body{
+            background-color:antiquewhite;
+        }
+        section{
+            width: 45%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        div{
+            margin-top: 10px;
+            background-color:blanchedalmond 
+        }
+        img{
+            width: 100px;
+            height: 100px;
+            padding: 18px 15px
+        }
+        ul{
+            vertical-align: top;
+            display: inline-block;
+            padding-left: 30px;
+        }
+        ul li{
+            list-style: none;
+        }
+        a:link {
+            color: rgb(156, 30, 30);
+            text-decoration: none;
+        }
+        a:visited {
+            color: rgb(9, 87, 9);
+            text-decoration: none;
+        }
+        a:hover {
+            color: rgb(212, 14, 113);
+            text-decoration: underline;
+        }
+        a:active {
+            color: rgb(12, 12, 46);
+            text-decoration: none;
+        }
+        h3{
+            display: inline;
+            margin: 0px;
+        }
+        button{
+            display: inline-block;
+            margin-left: 15px;
+            padding: 15px 25px;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #b1a116;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+        button:hover {background-color: #584813}
+
+        button:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translate(4px);
+        }
+        @media screen and (max-width: 600px) {
+        section{
+            width: 100%;
+        }
+        @media screen and (max-width: 992px) {
+        section{
+            width: 85%;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <button type="button" onclick="loadUnload(this)" value="load">Load GitHub Users</button>
+    </section>
+
+
+    <section></section>
+
+    <script>
+        var count=0;
+        function loadUnload(obj){
+            if(obj.value=="load"){
+                if(count==0){
+                    count=1;
+                    loadUsers();
+                }
+                else{
+                    document.getElementsByTagName("section")[1].style.display="block";
+                }
+                obj.value="unload";
+                obj.innerHTML="Unload GitHub Users";
+            }
+            else{
+                document.getElementsByTagName("section")[1].style.display="none";
+                obj.value="load";
+                obj.innerHTML="Load GitHub Users";
+            }
+        }
+        function loadUsers() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                let people = JSON.parse(this.responseText);
+                let output = "";
+                for(let i=0; i<10; i++){
+                    output +=
+                            '<div>'+
+                                '<img src="'+people[i].avatar_url+'">'+
+                                '<ul>'+
+                                    '<li><h3>ID: </h3>'+people[i].id+'</li>'+
+                                    '<li><h3>Login: </h3>'+people[i].login+'</li>'+
+                                    '<li><h3>GitHub: </h3> <a href="'+people[i].html_url+'" target= "_blank">'+people[i].html_url+'</a></li>'+
+                                    '<li><h3>Following: </h3><a href="'+people[i].following_url+'" target= "_blank">'+people[i].following_url+'</a></li>'+
+                                    '<li><h3>Subscriptions: </h3><a href="'+people[i].subscriptions_url+'" target= "_blank">'+people[i].subscriptions_url+'</a></li>'+
+                                '</ul>'+
+                            '</div>';
+                }
+                document.getElementsByTagName("section")[1].innerHTML=output;
+            }
+        xhttp.open("GET", "https://api.github.com/users", true);
+        xhttp.send();
+        }
+    </script>
+</body>
+</html>
